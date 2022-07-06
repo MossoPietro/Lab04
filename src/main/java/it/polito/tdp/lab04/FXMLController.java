@@ -62,6 +62,30 @@ public class FXMLController {
     @FXML
     private TextArea txtRisultato;
 
+    private Studente cercaStudente(String codice) {
+    	int matricola;
+    	
+    	try {
+    		matricola = Integer.parseInt(codice);
+    	} catch (NumberFormatException e) {
+    		throw new IllegalArgumentException("La matricola deve essere un numero!", e);
+    	}
+    	
+    	if (matricola < 0) {
+    		throw new IllegalArgumentException("La matricola deve essere un numero positivo!");
+    	}
+    	
+    	Studente s;
+    	
+    	try {
+    		s = this.model.getStudenteByMatricola(matricola);
+    	} catch (RuntimeException e) {
+    		throw new RuntimeException(e.getMessage(), e);
+    	}
+    	
+    	return s;
+    }
+    
     @FXML
     void doCercaStudente(ActionEvent event) {
     	
@@ -70,25 +94,11 @@ public class FXMLController {
     	lblErrore.setText("");
     	
     	String studente = txtMatricola.getText();
-    	int matricola;
-    	
-    	try {
-    		matricola = Integer.parseInt(studente);
-    	} catch (NumberFormatException e) {
-    		lblErrore.setText("La matricola deve essere un numero!");
-    		return;
-    	}
-    	
-    	if (matricola < 0) {
-    		lblErrore.setText("La matricola deve essere un numero positivo!");
-    		return;
-    	}
-    	
     	Studente s;
     	
     	try {
-    		s = this.model.getStudenteByMatricola(matricola);
-    	} catch (RuntimeException e) {
+    		s = cercaStudente(studente);
+    	} catch (Exception e ) {
     		lblErrore.setText(e.getMessage());
     		return;
     	}
@@ -102,6 +112,7 @@ public class FXMLController {
     	txtCognome.setText(s.getCognome());
     	
     }
+    
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
@@ -152,7 +163,42 @@ public class FXMLController {
     
     @FXML
     void doCercaCorsi(ActionEvent event) {
-
+    	lblErrore.setText("");
+    	txtRisultato.clear();
+    	
+    	String studente = txtMatricola.getText();
+    	Studente s;
+    	
+    	try {
+    		s = cercaStudente(studente);
+    	} catch (Exception e ) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (s == null) {
+    		lblErrore.setText("Studente non presente");
+    		return;
+    	}
+    	
+    	List<Corso> risultato = new ArrayList<Corso>();
+    	
+    	try {
+    		risultato = this.model.getCorsiByIscritto(s);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (risultato == null || risultato.size() == 0) {
+    		txtRisultato.setText("Lo studente selezionato non è iscritto ad alcun corso");
+    		return;
+    	}
+    	
+    	for (Corso c : risultato) {
+    		txtRisultato.appendText(c.toString() + "\n");
+    	}
+    	
     }
 
     @FXML

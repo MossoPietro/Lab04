@@ -54,5 +54,14 @@ public class Model {
 		}
 	}
 	
-
+	public List<Corso> getCorsiByIscritto(Studente studente) {
+		try {
+			List<Corso> corsi = studenteDAO.getCorsiByIscritto(studente);
+			return corsi;
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
 }
