@@ -1,5 +1,6 @@
 package it.polito.tdp.lab04.model;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import it.polito.tdp.lab04.DAO.CorsoDAO;
@@ -16,12 +17,23 @@ public class Model {
 	}
 
 	public List<Corso> getTuttiICorsi() {
-		return corsoDAO.getTuttiICorsi();
+		try {
+			return corsoDAO.getTuttiICorsi();
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
+	public Studente getStudenteByMatricola(int matricola) {
+		try {
+			Studente s = studenteDAO.getStudenteByMatricola(matricola);
+			return s;
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 	
 	
 	
-	
-	
+
 }

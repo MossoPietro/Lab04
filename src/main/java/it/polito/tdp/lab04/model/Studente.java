@@ -2,7 +2,7 @@ package it.polito.tdp.lab04.model;
 
 import java.util.Objects;
 
-public class Studente {
+public class Studente implements Comparable<Studente>{
 
 	private int matricola;
 	private String cognome;
@@ -64,5 +64,23 @@ public class Studente {
 		Studente other = (Studente) obj;
 		return matricola == other.matricola;
 	}
+
+	@Override
+	public String toString() {
+		return "Studente [matricola=" + matricola + ", cognome=" + cognome + ", nome=" + nome + ", CDS=" + CDS + "]";
+	}
+
+	@Override
+	public int compareTo(Studente o) {
+		if (this.getCognome().compareTo(o.getCognome()) == 0) {
+			return this.getNome().compareTo(o.getNome());
+		} else {
+			return this.getCognome().compareTo(o.getCognome());
+		}
+	}
+
+	
+	
+	
 	
 }
