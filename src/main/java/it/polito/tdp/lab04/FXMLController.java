@@ -93,7 +93,6 @@ public class FXMLController {
     		return;
     	}
     	
-    	
     	if (s == null) {
     		lblErrore.setText("Studente non presente");
     		return;
@@ -103,14 +102,56 @@ public class FXMLController {
     	txtCognome.setText(s.getCognome());
     	
     }
-    
-    @FXML
-    void doCercaCorsi(ActionEvent event) {
-
-    }
 
     @FXML
     void doCercaIscritti(ActionEvent event) {
+    	
+    	txtRisultato.clear();
+    	lblErrore.setText("");
+    	
+    	String codins = cmbCorso.getValue();
+    	
+    	if (codins.equals("Corsi") || codins == null) {
+    		lblErrore.setText("Selezionare un corso");
+    		return;
+    	}
+    	
+    	Corso corso;
+    	
+    	try {
+    		corso = this.model.getCorsoByCodice(codins);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (corso == null) {
+    		lblErrore.setText("Il corso selezionato non è presente!");
+    		return;
+    	}
+    	
+    	List<Studente> risultato = new ArrayList<Studente>();
+    	
+    	try {
+    		risultato = this.model.getStudentiIscrittiAlCorso(corso);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (risultato == null || risultato.size() == 0) {
+    		txtRisultato.setText("Il corso selezionato non presenta iscritti");
+    		return;
+    	}
+    	
+    	for (Studente s : risultato) {
+    		txtRisultato.appendText(s.toString() + "\n");
+    	}
+    	
+    }
+    
+    @FXML
+    void doCercaCorsi(ActionEvent event) {
 
     }
 
@@ -159,6 +200,5 @@ public class FXMLController {
     	for (Corso c : corsi) {
     		cmbCorso.getItems().add(c.getCodins());
     	}
-    	cmbCorso.getItems().add("");
     }
 }

@@ -24,6 +24,7 @@ public class Model {
 		}
 	}
 
+	
 	public Studente getStudenteByMatricola(int matricola) {
 		try {
 			Studente s = studenteDAO.getStudenteByMatricola(matricola);
@@ -34,6 +35,24 @@ public class Model {
 	}
 	
 	
+	public Corso getCorsoByCodice(String codins) {
+		try {
+			Corso c = corsoDAO.getCorsoByCodice(codins);
+			return c;
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
+	
+	
+	public List<Studente> getStudentiIscrittiAlCorso(Corso corso) {
+		try {
+			List<Studente> studenti = corsoDAO.getStudentiIscrittiAlCorso(corso);
+			return studenti;
+		} catch (RuntimeException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
+	}
 	
 
 }

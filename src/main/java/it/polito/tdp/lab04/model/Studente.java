@@ -67,7 +67,7 @@ public class Studente implements Comparable<Studente>{
 
 	@Override
 	public String toString() {
-		return "Studente [matricola=" + matricola + ", cognome=" + cognome + ", nome=" + nome + ", CDS=" + CDS + "]";
+		return matricola + "\t" + cognome + "\t" + nome + "\t" + CDS + "\t";
 	}
 
 	@Override
