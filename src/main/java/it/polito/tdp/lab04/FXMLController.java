@@ -34,6 +34,9 @@ public class FXMLController {
 
     @FXML
     private Button btnCercaIscritti;
+    
+    @FXML
+    private Button btnCerca;
 
     @FXML
     private Button btnIscrivi;
@@ -91,6 +94,7 @@ public class FXMLController {
     	
     	txtNome.clear();
     	txtCognome.clear();
+    	txtRisultato.clear();
     	lblErrore.setText("");
     	
     	String studente = txtMatricola.getText();
@@ -165,6 +169,8 @@ public class FXMLController {
     void doCercaCorsi(ActionEvent event) {
     	lblErrore.setText("");
     	txtRisultato.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
     	
     	String studente = txtMatricola.getText();
     	Studente s;
@@ -181,6 +187,8 @@ public class FXMLController {
     		return;
     	}
     	
+    	txtNome.setText(s.getNome());
+    	txtCognome.setText(s.getCognome());
     	List<Corso> risultato = new ArrayList<Corso>();
     	
     	try {
@@ -197,6 +205,68 @@ public class FXMLController {
     	
     	for (Corso c : risultato) {
     		txtRisultato.appendText(c.toString() + "\n");
+    	}
+    	
+    }
+    
+    @FXML
+    void doControlloIscrizione(ActionEvent event) {
+    	lblErrore.setText("");
+    	txtRisultato.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	
+    	String codice = txtMatricola.getText();
+    	Studente studente;
+    	
+    	try {
+    		studente = cercaStudente(codice);
+    	} catch (Exception e ) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (studente == null) {
+    		lblErrore.setText("Studente non presente");
+    		return;
+    	}
+    	
+    	txtNome.setText(studente.getNome());
+    	txtCognome.setText(studente.getCognome());
+    	String codins = cmbCorso.getValue();
+    	
+    	if (codins.equals("Corsi") || codins == null) {
+    		lblErrore.setText("Selezionare un corso");
+    		return;
+    	}
+    	
+    	Corso corso;
+    	
+    	try {
+    		corso = this.model.getCorsoByCodice(codins);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (corso == null) {
+    		lblErrore.setText("Il corso selezionato non è presente!");
+    		return;
+    	}
+    	
+    	boolean trovato;
+    	
+    	try {
+    		trovato = this.model.isIscritto(studente, corso);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (trovato) {
+    		txtRisultato.setText("Lo studente selezionato è iscritto al corso selezionato");
+    	} else {
+    		txtRisultato.setText("Lo studente selezionato non è iscritto al corso selezionato");
     	}
     	
     }
@@ -218,6 +288,7 @@ public class FXMLController {
 
     @FXML
     void initialize() {
+    	assert btnCerca != null : "fx:id=\"btnCerca\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnCercaCorsi != null : "fx:id=\"btnCercaCorsi\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnCercaIscritti != null : "fx:id=\"btnCercaIscritti\" was not injected: check your FXML file 'Scene.fxml'.";
         assert btnIscrivi != null : "fx:id=\"btnIscrivi\" was not injected: check your FXML file 'Scene.fxml'.";

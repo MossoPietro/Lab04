@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04.model;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.polito.tdp.lab04.DAO.CorsoDAO;
@@ -63,5 +64,24 @@ public class Model {
 		}
 	}
 	
+	public boolean isIscritto(Studente studente, Corso corso) {
+		
+		List<Corso> risultato = new ArrayList<Corso>();
+    	
+    	try {
+    		risultato = this.getCorsiByIscritto(studente);
+    	} catch (RuntimeException e) {
+    		throw new RuntimeException(e.getMessage(), e);
+    	}
+    	
+    	if (risultato == null || risultato.size() == 0) {
+    		return false;
+    	}
+    	if (!risultato.contains(corso)) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+	}
 	
 }

@@ -42,7 +42,7 @@
             </Button>
             <HBox>
                <children>
-                  <Label prefHeight="17.0" prefWidth="73.0" text="Studente: ">
+                  <Label prefHeight="17.0" prefWidth="77.0" text="Studente: ">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
@@ -59,7 +59,7 @@
                   </Button>
                   <TextField fx:id="txtNome" disable="true" promptText="Nome">
                      <HBox.margin>
-                        <Insets left="30.0" right="5.0" top="5.0" />
+                        <Insets left="20.0" right="5.0" top="5.0" />
                      </HBox.margin>
                   </TextField>
                   <TextField fx:id="txtCognome" disable="true" promptText="Cognome">
@@ -71,14 +71,19 @@
             </HBox>
             <HBox>
                <children>
-                  <Button fx:id="btnCercaCorsi" mnemonicParsing="false" onAction="#doCercaCorsi" text="Cerca Corsi">
+                  <Button fx:id="btnCercaCorsi" mnemonicParsing="false" onAction="#doCercaCorsi" prefHeight="25.0" prefWidth="88.0" text="Cerca Corsi">
                      <HBox.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnIscrivi" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#doIscrivi" text="Iscrivi">
+                  <Button fx:id="btnCerca" mnemonicParsing="false" onAction="#doControlloIscrizione" prefHeight="25.0" prefWidth="138.0" text="Controlla Iscirizione">
                      <HBox.margin>
-                        <Insets bottom="10.0" left="440.0" right="10.0" top="10.0" />
+                        <Insets left="100.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="btnIscrivi" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#doIscrivi" prefHeight="25.0" prefWidth="70.0" text="Iscrivi">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="100.0" right="10.0" top="10.0" />
                      </HBox.margin>
                   </Button>
                </children>
