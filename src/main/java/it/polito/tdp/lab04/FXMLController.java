@@ -159,6 +159,13 @@ public class FXMLController {
     		return;
     	}
     	
+    	//per fare la visualizzazione incolonnata, potrei utilizzare uno stringbuilder
+    	//StringBuilder sb = new StringBuilder();
+    	//successivamente dovrei fare un for per riempirlo
+    	//sb.append(String.format("%-4s ", s.getMatricola() ));
+    	//per visualizzarlo
+    	//txt.appendText(sb.toString());
+    	
     	for (Studente s : risultato) {
     		txtRisultato.appendText(s.toString() + "\n");
     	}
@@ -273,7 +280,63 @@ public class FXMLController {
 
     @FXML
     void doIscrivi(ActionEvent event) {
-
+    	lblErrore.setText("");
+    	txtRisultato.clear();
+    	txtNome.clear();
+    	txtCognome.clear();
+    	
+    	String codice = txtMatricola.getText();
+    	Studente studente;
+    	
+    	try {
+    		studente = cercaStudente(codice);
+    	} catch (Exception e ) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (studente == null) {
+    		lblErrore.setText("Studente non presente");
+    		return;
+    	}
+    	
+    	txtNome.setText(studente.getNome());
+    	txtCognome.setText(studente.getCognome());
+    	String codins = cmbCorso.getValue();
+    	
+    	if (codins.equals("Corsi") || codins == null) {
+    		lblErrore.setText("Selezionare un corso");
+    		return;
+    	}
+    	
+    	Corso corso;
+    	
+    	try {
+    		corso = this.model.getCorsoByCodice(codins);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (corso == null) {
+    		lblErrore.setText("Il corso selezionato non è presente!");
+    		return;
+    	}
+    	
+    	boolean risultato;
+    	
+    	try {
+    		risultato = this.model.iscriviStudenteACorso(studente, corso);
+    	} catch (RuntimeException e) {
+    		lblErrore.setText(e.getMessage());
+    		return;
+    	}
+    	
+    	if (risultato) {
+    		txtRisultato.setText("Studente iscritto al corso");
+    	} else {
+    		txtRisultato.setText("Iscrizione fallita");
+    	}
     }
 
     @FXML
@@ -305,7 +368,7 @@ public class FXMLController {
    
     public void setModel(Model model) {
     	this.model = model;
-    
+    	//Sarebbe meglio caricare la combobox direttamente con i corsi in modo da evitare le ricerche successive
     	cmbCorso.setValue("Corsi");
     	List<Corso> corsi = new ArrayList<Corso>();
     	try {

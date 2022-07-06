@@ -1,6 +1,7 @@
 package it.polito.tdp.lab04.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -111,10 +112,30 @@ public class CorsoDAO {
 	/*
 	 * Data una matricola ed il codice insegnamento, iscrivi lo studente al corso.
 	 */
-	public boolean inscriviStudenteACorso(Studente studente, Corso corso) {
-		// TODO
-		// ritorna true se l'iscrizione e' avvenuta con successo
-		return false;
+	public boolean iscriviStudenteACorso(Studente studente, Corso corso) {
+		boolean inserito = false;
+		try {
+			Connection conn = ConnectDB.getConnection();
+
+			String sql = "INSERT INTO iscrizione(codins, matricola) VALUES (?, ?)";
+			PreparedStatement st = conn.prepareStatement(sql);
+
+			st.setString(1,corso.getCodins());
+			st.setInt(2, studente.getMatricola());
+
+			int res = st.executeUpdate();
+			st.close();
+
+			conn.close();
+			
+			if (res==1) {
+				inserito = true;
+			}
+			return inserito;
+			
+		} catch (SQLException e) {
+			throw new RuntimeException(e.getMessage(), e);
+		}
 	}
 
 }
